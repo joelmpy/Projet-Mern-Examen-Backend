@@ -13,20 +13,20 @@ const SingleUser = async (req, res, next) => {
     res.json(user)
 }
 
-const CreateUser = async (req, res, next) => { 
-
-    const user = await new PassportModel(req.body)
-    try {
-        await user.save()
-        if(!user) {
-            console.log('bisdache')
-            res.send('Errreur Post')
-        }
-        res.status(200).json(user)
-    } catch (err) {
-        res.status(500).send('Error post')
+const CreateUser =  async (req, res, next) => {
+        console.log(req.user)
+        res.json({
+            massage: "Signup Ok",
+            user: req.user,
+            username : req.user.username,
+            email : req.user.email,
+            password: req.user.password,
+            aboutMe: req.user.aboutMe,
+            registrationDate: req.user.registrationDate,
+        })
     }
-}
+
+
 
 module.exports = {
     firstPassport,

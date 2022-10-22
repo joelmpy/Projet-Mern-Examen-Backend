@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
+    Dateofday : {
+            type: Date,
+            default: Date.now
+    },
     gender: {
         type: String,
         required : true,
@@ -47,10 +51,16 @@ const UserSchema = new mongoose.Schema({
         }
     },
     activity : {
-        type : String,
+        type : Number,
         required : true,
         trim : true,
-        lowercase : true
+        max : 5
+    },
+    totalCalories : {
+        type : Number,
+    },
+    bmi : {
+        type : Number
     }
 
 })

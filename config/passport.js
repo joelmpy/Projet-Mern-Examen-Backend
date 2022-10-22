@@ -1,33 +1,64 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const UserModel = require('../model/PassportModel')
+const PassportModel = require('../model/PassportModel')
 const bcrypt = require('bcrypt');
 
-passport.use(new LocalStrategy({
-    usernameField: 'username',
-    passwordField: 'password',
-    passReqToCallback: true,
-},
-    function (username, password, done) {
-        UserModel.findOne({ username }, function (err, user) {
-            if (err) {
-                done(err)
-            }
+
+passport.use(
+    'signup',
+    new LocalStrategy({
+        usernameField: "email",
+        password: "password",
+    }, async (email, password, done) => {
+        try {
+            console.log("email", email)
+            console.log("password", password)
+            const user = await PassportModel.create({email, password});
             if (!user) {
-                done(null, false)
+                return done(null, false)
             }
-            bcrypt.compare(password, user.password).then(isTrue => {
-                if (!isTrue) {
-                    return done(null, false)
+            const isSame = await bcrypt.compare(password, user.password);
+            if (!isSame) {
+                return done(null, false)
+            }
+        
+            done(null, user)
+        } catch (error) {
+            return done(error)
+        }
+
+    })
+)
+
+
+passport.use(
+    'login',
+    new LocalStrategy({
+        usernameField: 'email',
+        passwordField: 'password'
+    },
+        async (email, password, done) => {
+            try {
+                const user = await PassportModel.findOne({ email })
+                // je verife si il y a un utilsateur sauvgarder ou pas//
+                if (!user) {
+                    return done(null, false, { message: "Utilsateur non trouvé" })
                 }
-                return done(null, user);
-            })
+                // je verife si le mots de passe est bon ou pas
+                const validate = await user.isValidPassword(password)
+                if (!validate) {
+                    return done(null, false, { message: 'Error de connexion' })
+                }
+
+                // je return si tout est bon l'user avce la conexion reussi 
+                return done(null, user, { message: 'Connexion reussi' })
+
+            }
+            catch (error) {
+                return done(error)
+            }
         })
-    }
-
-))
-
-
+)
 
 
 passport.serializeUser((user, done) => {
@@ -35,7 +66,7 @@ passport.serializeUser((user, done) => {
 })
 
 passport.deserializeUser(async (id, done) => {
-    const user = await UserModel.findById(id)
+    const user = await PassportModel.findById(id)
     done(null, user)
 })
 

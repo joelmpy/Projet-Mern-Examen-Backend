@@ -3,7 +3,7 @@ const express = require('express')
 const cors = require('cors');
 const mongoose = require('mongoose')
 const session = require('express-session')
-const passport = require('passport')
+const passport = require('./config/passport')
 
 // Route // 
 
@@ -18,6 +18,7 @@ mongoose.connect('mongodb://localhost:27017/Calorie')
 
 app.use(express.json());
 app.use(cors())
+app.use(express.urlencoded({ extended: true }));
 app.use(session({
     secret: 'MyAwesomeSecret',
     resave: true,
