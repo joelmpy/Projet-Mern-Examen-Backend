@@ -7,10 +7,8 @@ const firstUser = async (req, res) => {
 
 const singleUser = async (req, res) => {
     const user = await UsersModel.findById({ _id: req.params.id })
-    if(!user){
-        res.status(400).send({message : 'Aucun information disponible de ce id'})
-    }
-    res.status(200).json(user)
+    res.json(user)
+    console.log(user)
 }
 
 

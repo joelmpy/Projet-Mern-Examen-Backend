@@ -4,10 +4,10 @@ const {firstUser, singleUser, postUser, patchUser, deleteUser, resultUser} = req
 const UserModel = require('../model/UsersModel');
 
 
-// get all // 
-route.get('/info', firstUser)
 // get one // 
 route.get('/info/:id', singleUser)
+// get all // 
+route.get('/info', firstUser)
 // POST // 
 route.post('/info', postUser)
 // Result GET // 
