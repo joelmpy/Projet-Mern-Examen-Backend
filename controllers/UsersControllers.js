@@ -53,7 +53,25 @@ const singleUser = async (req, res) => {
         else {
             totalCalories = null
         } 
-        return totalCalories
+        return totalCalories.toFixed(1)
+
+    }
+
+
+    function getIdealWeight (height, gender) {
+            let idealWeight = 0 
+        if (gender === "" || height < 0 ){
+            console.log("error")
+        } else if (gender === "homme"){
+            idealWeight = height - 100 - ((height - 150) / 4)
+            console.log('Men ====> ',  idealWeight)
+        } else if (gender === "femme"){
+            idealWeight = height - 100 - ((height - 150) / 2.5)
+            console.log('Femme ==> ', idealWeight)
+        } else {
+            idealWeight = null
+        }
+        return idealWeight
 
     }
 
@@ -67,33 +85,38 @@ const postUser = async (req, res, next) => {
         const height = parseFloat(req.body.height)
         const age = parseFloat(req.body.age)
         const activity = parseFloat(req.body.activity)
-        const text= ''
+        let text= ''
         // CALCULATEUR DE BMI
         const bmi = getBmi(weight, height)
         if (bmi < 19) {
             text = "You are Underweight!"
-          console.log("You are Underweight!", bmi) 
         } else if (19 <= bmi && bmi < 25) {
-            console.log(bmi, "You are Normalweight!");
+            text = "You are Normalweight!"
         } else if (25 <= bmi && bmi < 30) {
-         console.log(bmi, "You are Overweight!") 
+            text = "You are Overweight!!"
         } else {
-            console.log('You are Obese!', bmi)            
+           text = `You are Obese!`
         }
 
-        // Calculator de calorie journalier avec activity ou pas
+        // Calculateur de calorie journalier avec activity ou pas
         
         const totalCalories = getCalorie(weight, height, gender, activity, age)
-        const newUser = await new UsersModel({ weight, gender, height, age, activity, totalCalories, bmi})
+
+        // Calculateur du poids idéal selon le sexe 
+
+        const idealWeight = getIdealWeight(height, gender)
+
+        const newUser = await new UsersModel({ weight, gender, height, age, activity, totalCalories, bmi, idealWeight})
         await newUser.save();
         if (newUser) {
             res.status(200).json({result : {
                 totalCalories : totalCalories,
                 BMI : bmi,
-                text : text
+                idealWeight : idealWeight,
             }})
         }
     } catch (err) {
+        console.log(err)
         res.status(500).send('Les info sont pas bon')
     }
 }
@@ -109,6 +132,7 @@ res.status(200).json({
     user : {
         bmi : user.bmi,
         totalCalories : user.totalCalories,
+        idealWeight : idealWeight,
     }
 })
 }

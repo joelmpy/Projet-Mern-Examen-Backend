@@ -61,6 +61,9 @@ const UserSchema = new mongoose.Schema({
     },
     bmi : {
         type : Number
+    }, 
+    idealWeight : {
+        type : Number
     }
 
 })
