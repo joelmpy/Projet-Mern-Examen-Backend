@@ -52,11 +52,6 @@ route.post('/signup',
 // Passport Login Method POST
 
 
-route.post('/login', body('email').trim().isEmail().normalizeEmail(), (req, res, next) => {
-    passport.authenticate('local', (req, res) => {
-
-    })
-})
 
 route.post('/login', (req, res, next) => {
 
