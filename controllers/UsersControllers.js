@@ -77,7 +77,7 @@ const singleUser = async (req, res) => {
 
 const postUser = async (req, res, next) => {
     try {
-
+        console.log(req.body)
         //  Recuperation de mes données //
 
         const weight = parseFloat(req.body.weight)
