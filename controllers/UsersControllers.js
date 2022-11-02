@@ -6,9 +6,8 @@ const firstUser = async (req, res) => {
 }
 
 const singleUser = async (req, res) => {
-    const user = await UsersModel.findById({ _id: req.params.id })
-    res.json(user)
-    console.log(user)
+    const user = await UsersModel.find({_id : req.params.id})
+    res.json(user[0])
 }
 
 
@@ -21,7 +20,7 @@ const singleUser = async (req, res) => {
 
     function getCalorie (weight, height, gender, activity, age) {
         let totalCalories = 1.1 * (13.397 * weight + (4.799 * height) - (5.677 * age) + 88.362)
-        
+            console.log(weight, height, gender, activity)
         if (weight < 1 || height === 0 || 80 < age || age < 15) {
             res.status(404).send("les champs sont pas rempli OU l'un des champs est pas rempli")
         } else if (gender === 'homme' && activity === 1) {
@@ -140,8 +139,11 @@ res.status(200).json({
 const patchUser = async (req, res, next) => {
     const body = req.body
     const id = req.params.id
+    console.log(body)
     body["bmi"] = getBmi(body.weight, body.height)
     body['totalCalories'] = getCalorie(body.weight, body.height, body.gender, body.activity, body.age, )
+    body['idealWeight'] = getIdealWeight(body.height, body.gender)
+
     const user = await UsersModel.findByIdAndUpdate(id, body )
     await user.save()
     console.log(user)
