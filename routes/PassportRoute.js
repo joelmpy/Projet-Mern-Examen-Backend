@@ -53,18 +53,27 @@ route.post('/signup',
 
 
 
-route.post('/login', (req, res, next) => {
-
-    passport.authenticate('local'), (req, res) => {
+route.post('/login',passport.authenticate('local'), (req, res, next) => {
         if (req.user) {
             req.logIn(req.user, (err) => {
-                res.status(200).json({ message: req.user })
+                res.status(200).json(req.user)
             })
         }
         else {
             res.status(404).json({ message: 'pas trouvé', Succes: 'pas de connexion possible' })
         }
     }
+)
+
+route.post('/disconnect', (req, res, next) => {
+    req.logout(function(err) {
+        if (err) { 
+            return next(err)
+        }
+        res.status(200).send({
+          message:"disconnected"
+        })
+      })
 })
 
 

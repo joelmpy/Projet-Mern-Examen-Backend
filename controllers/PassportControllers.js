@@ -15,15 +15,7 @@ const SingleUser = async (req, res, next) => {
 
 const CreateUser =  async (req, res, next) => {
         console.log(req.user)
-        res.json({
-            massage: "Signup Ok",
-            user: req.user,
-            username : req.user.username,
-            email : req.user.email,
-            password: req.user.password,
-            aboutMe: req.user.aboutMe,
-            registrationDate: req.user.registrationDate,
-        })
+        res.json(req.user)
     }
 
 

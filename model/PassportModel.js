@@ -33,11 +33,7 @@ const PassportSchema = new mongoose.Schema({
     dateOfBirth: {
         type: Date,
         default: Date.now
-    },
-    valueInfo : [{
-            ref : 'PassportModel',
-            type : mongoose.Types.ObjectId 
-    }]
+    }
 })
 
 // PassportSchema.pre('save', async function (next) {
