@@ -129,6 +129,7 @@ const postUser = async (req, res, next) => {
                 totalCalories : totalCalories,
                 BMI : bmi,
                 idealWeight : idealWeight,
+                _id:newUser._id
             }})
         }
     }
