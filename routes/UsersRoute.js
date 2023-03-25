@@ -1,10 +1,11 @@
 const express = require('express');
 const route = express.Router();
-const {firstUser, singleUser, postUser, patchUser, deleteUser, resultUser} = require('../controllers/UsersControllers');
+const {firstUser, singleUser, postUser, patchUser, deleteUser, resultUser, allUser} = require('../controllers/UsersControllers');
 const UserModel = require('../model/UsersModel');
 const { body, validationResult } = require('express-validator');
 
-
+// get all user //
+route.get('/info', allUser)
 // get one // 
 route.get('/info/:id', singleUser)
 // get all // 

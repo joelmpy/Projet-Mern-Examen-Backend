@@ -4,6 +4,12 @@ const mongoose = require('mongoose')
 const { body, validationResult } = require('express-validator');
 
 
+const allUser = async (req, res) => {
+    const user = await UsersModel.find()
+    res.json(user)
+}
+
+
 const firstUser = async (req, res) => {
     const user = await UsersModel.find({created_by : req.params.id})
     res.json(user)
@@ -190,4 +196,4 @@ const deleteUser = async (req, res, next) => {
 
 }
 
-module.exports = { firstUser, singleUser, postUser, resultUser, patchUser, deleteUser}
+module.exports = { firstUser, singleUser, postUser, resultUser, patchUser, deleteUser, allUser}
